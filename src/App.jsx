@@ -115,7 +115,7 @@ function App() {
 
   const pages = [
     {
-      title: 'A NEW CHAPTER BEGINS',
+      title: 'A LOOK BACK!',
       intro:
         'To my brother and sister-in-law: Every great story expands. Heres a look back at the journey that brought you here, and the little boy about to make our family whole. ',
     },
