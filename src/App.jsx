@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react'
+import {useEffect,useRef, useState} from 'react'
+import {createPortal} from 'react-dom'
 import './App.css'
 import {
   site,
@@ -19,15 +20,97 @@ function Divider() {
     </div>
   )
 }
+function Lightbox({ items, index, setIndex, onClose }) {
+  const touchX = useRef(null)
+  const total = items.length
+  const prev = () => setIndex((index - 1 + total) % total)
+  const next = () => setIndex((index + 1) % total)
 
-function Photo({ src, caption, date }) {
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft') prev()
+      if (e.key === 'ArrowRight') next()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
+
+  const onTouchStart = (e) => {
+    touchX.current = e.touches[0].clientX
+  }
+  const onTouchEnd = (e) => {
+    if (touchX.current === null) return
+    const dx = e.changedTouches[0].clientX - touchX.current
+    touchX.current = null
+    if (Math.abs(dx) > 50) {
+      if (dx < 0) next()
+      else prev()
+    }
+  }
+
+  const item = items[index]
+  return createPortal(
+    <div
+      className="lightbox"
+      onClick={onClose}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      <img key={index} src={item.photo} alt={item.caption || ''} />
+      {total > 1 && (
+        <>
+          <button
+            type="button"
+            className="lb-arrow lb-prev"
+            aria-label="Previous photo"
+            onClick={(e) => {
+              e.stopPropagation()
+              prev()
+            }}
+          >
+            &lsaquo;
+          </button>
+          <button
+            type="button"
+            className="lb-arrow lb-next"
+            aria-label="Next photo"
+            onClick={(e) => {
+              e.stopPropagation()
+              next()
+            }}
+          >
+            &rsaquo;
+          </button>
+          <p className="lb-count">
+            {index + 1} / {total}
+          </p>
+        </>
+      )}
+      <p className="lb-hint">
+        {total > 1 ? 'Swipe or tap the arrows · tap the photo to close' : 'Tap to close'}
+      </p>
+      <span className="lightbox-close">✕</span>
+    </div>,
+    document.body
+  )
+}
+
+function Photo({ src, caption, date, onOpen }) {
   const [failed, setFailed] = useState(false)
+  const [solo, setSolo] = useState(false)
   return (
     <figure className="photo">
       {failed || !src ? (
         <div className="photo-placeholder">Photo coming soon</div>
       ) : (
-        <img src={src} alt={caption || ''} loading="lazy" onError={() => setFailed(true)} />
+        <img 
+        src={src} 
+        alt={caption || ''} 
+        loading="lazy" 
+        onError={() => setFailed(true)}
+        onClick={() => (onOpen ? onOpen() : setSolo(true))} 
+        />
       )}
       {(date || caption) && (
         <figcaption>
@@ -35,24 +118,76 @@ function Photo({ src, caption, date }) {
           {caption}
         </figcaption>
       )}
+      {solo && (
+        <Lightbox
+        items={[{photo: src, caption}]}
+        index={0}
+        setIndex={() => {}}
+        onClose={() => setSolo(false)}
+      />
+      )}
     </figure>
   )
 }
 
 function Gallery({ items }) {
+  const [current, setCurrent] = useState(null)
   return (
     <div className="gallery">
       {items.map((item, i) => (
-        <Photo key={i} src={item.photo} caption={item.caption} date={item.date} />
+        <Photo 
+        key={i} 
+        src={item.photo} 
+        caption={item.caption} 
+        date={item.date} 
+        onOpen={() => setCurrent(i)}
+        />
       ))}
+      {current !== null &&(
+        <Lightbox
+        items={items}
+        index={current}
+        setIndex={setCurrent}
+        onClose={() => setCurrent(null)}
+        />
+      )}
     </div>
   )
 }
 
 function Envelope() {
   const [open, setOpen] = useState(false)
+  const [hearts]= useState(() =>
+    Array.from({ length: 28}, (_, i) => ({
+      id: i,
+      left: Math.random() *100,
+      size:14+Math.random()*20,
+      delay: Math.random()*2.5,
+      duration: 4+Math.random()*3,
+    }))
+  )
   return (
     <div className={`envelope-wrap ${open ? 'is-open' : ''}`}>
+      {open &&
+  createPortal(
+    <div className="hearts">
+      {hearts.map((h) => (
+        <span
+          key={h.id}
+          className="heart"
+          style={{
+            left: `${h.left}%`,
+            fontSize: `${h.size}px`,
+            animationDelay: `${h.delay}s`,
+            animationDuration: `${h.duration}s`,
+          }}
+        >
+          ❤
+        </span>
+      ))}
+    </div>,
+    document.body
+  )}
       <button
         type="button"
         className="envelope"
@@ -117,7 +252,7 @@ function App() {
     {
       title: 'A LOOK BACK!',
       intro:
-        'To my brother and sister-in-law: Every great story expands. Heres a look back at the journey that brought you here, and the little boy about to make our family whole. ',
+        "To my brother and sister-in-law: Every great story expands. Here's a look back at the journey that brought you here, and the little boy about to make our family whole. ",
     },
     {
       title: loveStory.title,
