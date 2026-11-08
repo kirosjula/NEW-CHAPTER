@@ -1,4 +1,5 @@
 import {useEffect,useRef, useState} from 'react'
+import Wishes from './Wishes.jsx';
 import {createPortal} from 'react-dom'
 import './App.css'
 import {
@@ -302,17 +303,9 @@ function App() {
     },
     {
       title: blessings.title,
-      intro: blessings.intro,
-      body: (
-        <div className="blessings">
-          {blessings.items.map((b, i) => (
-            <blockquote key={i} className="blessing">
-              <p>{b.message}</p>
-              <footer>{b.from}</footer>
-            </blockquote>
-          ))}
-        </div>
-      ),
+      intro:blessings.intro,
+      body:<Wishes/>,
+     
     },
     {
       title: closing.title,
