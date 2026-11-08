@@ -12,7 +12,7 @@ export default function Wishes() {
 
   useEffect(()=>{
     const q = query(collection(db,"wishes"), orderBy("createdAt", "asc"));
-    return onSnapshort(q,(snap)=>
+    return onSnapshot(q,(snap)=>
     setWishes(
       snap.docs
       .map((d)=>({id:d.id,...d.data()}))
@@ -40,7 +40,7 @@ export default function Wishes() {
 
   return (
     <div className="wishes">
-      <h3 className="wishes-title">Leave your wish for the baby boy❤️</h3>
+      <h3 className="wishes-title">Write a welcome message for the baby boy❤️</h3>
       <form onSubmit={submit}>
         <input
           value={name}
