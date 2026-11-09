@@ -748,3 +748,41 @@ button:focus-visible {
     translate: 0 0;
   }
 }
+.story-bar {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 50;
+  display: flex;
+  gap: 8px;
+}
+
+.story-bar button {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  color: #4b4347;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.story-bar button:hover {
+  background: #fff;
+}
+
+@media (max-width: 600px) {
+  .story-bar {
+    top: 10px;
+    left: 10px;
+    gap: 6px;
+  }
+
+  .story-bar button {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+}

@@ -1,6 +1,7 @@
 import {useEffect,useRef, useState} from 'react'
 import Wishes from './Wishes.jsx';
 import {createPortal} from 'react-dom'
+import Intro from './Intro'
 import './App.css'
 import {
   site,
@@ -215,14 +216,19 @@ function Envelope() {
 }
 
 function App() {
+  
   const [entered, setEntered] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [page, setPage] = useState(0)
   const audioRef = useRef(null)
 
-  const enterStory = () => {
-    setEntered(true)
-    setPage(0)
+  const [introDone, setIntroDone] = useState(false)
+
+  
+    const enterStory = () =>{
+      setEntered(true)
+      setIntroDone(false)
+      setPage(0)
     window.scrollTo(0, 0)
     // The click counts as permission, so the browser allows music to start.
     audioRef.current
@@ -297,10 +303,7 @@ function App() {
         </>
       ),
     },
-    {
-      title: letter.title,
-      body: <Envelope />,
-    },
+    
     {
       title: blessings.title,
       intro:blessings.intro,
@@ -335,15 +338,46 @@ function App() {
     setPage(page - 1)
     window.scrollTo(0, 0)
   }
+  const replayMagic = () => {
+    setPage(0)
+    setIntroDone(false)
+    window.scrollTo(0, 0)
+  }
+
+  const startOfStory = () => {
+    setPage(0)
+    window.scrollTo(0, 0)
+  }
+
+if (entered && !introDone) {
+    return (
+      <>
+      <audio ref={audioRef} src={site.music} loop preload="auto"/>
+      <Intro onFinish={() => setIntroDone(true)}/>
+          </>
+      ) 
+  }
+
+
 
   return (
     <>
       <audio ref={audioRef} src={site.music} loop preload="auto" />
 
+      {
+          entered && (
+        <div className="story-bar">
+          <button onClick={replayMagic}>✨ Replay Magic</button>
+          <button onClick={startOfStory}>📖 Read Our Story</button>
+          
+        </div>
+      )}
+
       {!entered ? (
         <main className="welcome-page">
           <div className="card">
             <p className="small-heading">A CELEBRATION OF LOVE &amp; FAMILY</p>
+            
             <h1>
               A New Chapter
               <br />
