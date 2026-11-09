@@ -53,8 +53,8 @@ export const parenthood = {
 export const baby = {
   title: 'WELCOME, BABY BOY',
   photos: [
-    { photo: '/baby3.jpg', caption: 'Hello, little one.' },
-    { photo: '/baby4.jpg', caption: 'Our newest blessing.' },
+    { photo: '/babby.jpg', caption: 'Hello, little one.' },
+    { photo: '/babbby.jpg', caption: 'Our newest blessing.' },
   ],
   message: 'You are already so loved, sweet little boy. We cannot wait to watch you grow, laugh, and fill our lives with endless joy.',
 }

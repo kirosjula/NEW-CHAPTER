@@ -170,9 +170,21 @@ h2 {
 .photo img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
+  height: auto;
+
+  object-fit: contain;
   border-radius: 3px;
+  max-height: 60vh;
+}
+
+.card[class*="photo"],
+.card[class*="frame"],
+.card[class*="polaroid"],
+.card[class*="placeholder"]{
+  aspect-ratio: auto!important;
+  height:auto!important;
+  max-height:none!important;
+  min-width: 0!important;
 }
 
 .photo-placeholder {
@@ -763,15 +775,25 @@ button:focus-visible {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(10px);
-  color: #4b4347;
+  color: var(--brand);
   font: inherit;
   font-size: 13px;
   cursor: pointer;
   touch-action: manipulation;
 }
 
+.story-bar button:last-child{
+  background: var(--brand);
+  color:#fff;
+}
+
 .story-bar button:hover {
   background: #fff;
+}
+
+.story-bar button:last-child:hover{
+  background: var(--brand);
+  filter:brightness(1.15);
 }
 
 @media (max-width: 600px) {
@@ -785,4 +807,99 @@ button:focus-visible {
     padding: 7px 10px;
     font-size: 12px;
   }
+}
+
+button {
+  background: var(--brand) !important;
+  color: #fff !important;
+  border: none !important;
+  font-family: var(--font-body) !important;
+}
+
+button:hover {
+  background: var(--brand) !important;
+  filter: brightness(1.15);
+}
+
+p,
+span,
+li,
+label,
+figcaption,
+blockquote,
+small {
+  color: var(--brand) !important;
+  font-family: var(--font-body) !important;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--brand) !important;
+  font-family: var(--font-heading) !important;
+}
+
+/* keep button text white */
+button,
+button * {
+  color: #fff !important;
+}
+
+/* intro page buttons keep their own look */
+.in-catch {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.in-skip {
+  background: rgba(255, 255, 255, 0.7) !important;
+  color: #2b3a55 !important;
+}
+
+.in-btn {
+  background: var(--brand) !important;
+  /* same navy as the rest */
+  color: #fff !important;
+}
+
+.in-catch:hover,
+.in-catch:active,
+.in-catch:focus {
+  background: transparent !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.in-skip:hover {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #2b3a55 !important;
+}
+
+.in-btn:hover {
+  background: var(--brand) !important;
+  filter: brightness(1.15);
+}
+
+img {
+  height: auto !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+}
+
+.card img,
+.photo img {
+  width: 100% !important;
+}
+
+.photo,
+[class*="photo"],
+[class*="polaroid"],
+[class*="frame"],
+[class*="gallery"] {
+  height: auto !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  overflow: visible !important;
 }
