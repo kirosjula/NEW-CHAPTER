@@ -259,7 +259,7 @@ function App() {
     {
       title: 'A LOOK BACK!',
       intro:
-        "To my brother and sister-in-law: Every great story expands. Here's a look back at the journey that brought you here, and the little boy about to make our family whole. ",
+        "To Samy & Biftu: Every great story expands. Here's a look back at the journey that brought you here, and the little boy about to make our family whole. ",
     },
     {
       title: loveStory.title,
